@@ -48,21 +48,35 @@ uint64_t run_benchmark(int num_threads) {
 }
 
 int main() {
+	uint64_t runtime_ns = 0;
+
 	printf("Running single-core benchmark ...\n");
-	uint64_t single_core_total = 0;
+	uint64_t single_core_runtime_total = 0;
+	uint64_t single_core_runtimes[RUNS];
 	for (int i = 0; i < RUNS; i++) {
-		single_core_total += run_benchmark(1);
+		runtime_ns = run_benchmark(1);
+		single_core_runtimes[i] = runtime_ns;
+		single_core_runtime_total += runtime_ns;
+		if (i % 10 == 0) {
+			printf("\tRun #%2d finished in %lu ns\n", i+1, runtime_ns);
+		}
 	}
-	uint64_t single_core_time = single_core_total / RUNS;
-	printf("\tSingle-core average execution time: %lu ns\n", single_core_time);
+	uint64_t single_core_time = single_core_runtime_total / RUNS;
+	printf("\t\tSingle-core average execution time: %lu ns\n", single_core_time);
 
 	printf("Running multi-core benchmark ...\n");
-	uint64_t multi_core_total = 0;
+	uint64_t multi_core_runtime_total = 0;
+	uint64_t multi_core_runtimes[RUNS];
 	for (int i = 0; i < RUNS; i++) {
-		multi_core_total += run_benchmark(MAX_THREADS);
+		runtime_ns = run_benchmark(MAX_THREADS);
+		multi_core_runtimes[i] = runtime_ns;
+		multi_core_runtime_total += runtime_ns;
+		if (i % 10 == 0) {
+			printf("\tRun #%2d finished in %lu ns\n", i+1, runtime_ns);
+		}
 	}
-	uint64_t multi_core_time = multi_core_total / RUNS;
-	printf("\tMulti-core average execution time (%d threads): %lu ns\n", MAX_THREADS, multi_core_time);
+	uint64_t multi_core_time = multi_core_runtime_total / RUNS;
+	printf("\t\tMulti-core average execution time (%d threads): %lu ns\n", MAX_THREADS, multi_core_time);
 
 	// Compute a relative score (lower time = higher score)
 	double multiplier = 50.0 * 1000.0 * 1000.0;
