@@ -48,21 +48,21 @@ uint64_t run_benchmark(int num_threads) {
 }
 
 int main() {
-	printf("Running single-core benchmark...\n");
+	printf("Running single-core benchmark ...\n");
 	uint64_t single_core_total = 0;
 	for (int i = 0; i < RUNS; i++) {
 		single_core_total += run_benchmark(1);
 	}
 	uint64_t single_core_time = single_core_total / RUNS;
-	printf("Single-core average execution time: %lu ns\n", single_core_time);
+	printf("\tSingle-core average execution time: %lu ns\n", single_core_time);
 
-	printf("Running multi-core benchmark...\n");
+	printf("Running multi-core benchmark ...\n");
 	uint64_t multi_core_total = 0;
 	for (int i = 0; i < RUNS; i++) {
 		multi_core_total += run_benchmark(MAX_THREADS);
 	}
 	uint64_t multi_core_time = multi_core_total / RUNS;
-	printf("Multi-core average execution time (%d threads): %lu ns\n", MAX_THREADS, multi_core_time);
+	printf("\tMulti-core average execution time (%d threads): %lu ns\n", MAX_THREADS, multi_core_time);
 
 	// Compute a relative score (lower time = higher score)
 	double multiplier = 50.0 * 1000.0 * 1000.0;
